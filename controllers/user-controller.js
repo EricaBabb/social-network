@@ -7,11 +7,11 @@ const userController = {
         // uses the Mongoose .find() method, much like the Sequelize .findAll() method
         User.find({})
         //we dont want to just see the id of the thoughts
-        .populate({
-          path: 'thoughts',
-          //tells mongoose we don't care about the __v field on thoughts
-          select: '-__v'
-        })
+        // .populate({
+        //   path: 'thoughts',
+        //   //tells mongoose we don't care about the __v field on thoughts
+        //   select: '-__v'
+        // })
         //-__v for field on the user as well
         .select('-__v')
         //Newest user returns first
@@ -56,6 +56,22 @@ createUser({ body }, res) {
       .catch(err => res.status(400).json(err));
   },
 
+  addFriend({ params, body }, res) {
+    User.findOneAndUpdate(
+      { _id: params.UserId },
+      { $push: { reactions: body } },
+      { new: true }
+    )
+      .then(dbUserData => {
+        if (!dbUserData) {
+          res.status(404).json({ message: 'No user found with this id!' });
+          return;
+        }
+        res.json(dbUserData);
+      })
+      .catch(err => res.json(err));
+  },
+
 
   // update user by id
 updateUser({ params, body }, res) {
@@ -81,7 +97,18 @@ deleteUser({ params }, res) {
         res.json(dbUserData);
       })
       .catch(err => res.status(400).json(err));
+  },
+
+  removeReaction({ params }, res) {
+    Thought.findOneAndUpdate(
+      { _id: params.thoughtId },
+      //$pull operator to remove the specific reaction from the reactions array where the reactionId matches the value of params.reactionId passed in from the route
+      { $pull: { reactions: { reactionId: params.reactionId } } },
+      { new: true }
+    )
+      .then(dbUserData => res.json(dbUserData))
+      .catch(err => res.json(err));
   }
-  }
+  };
 
 module.exports = userController;

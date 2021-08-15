@@ -1,18 +1,8 @@
-const { Schema, model, Types } = require('mongoose');
-
-// const FriendSchema = new Schema(
-//   {
-//     // set custom id to avoid confusion with the parent, user, _id field
-//     friendId: {
-//       type: Schema.Types.ObjectId,
-//       default: () => new Types.ObjectId()
-//     }
-//   }
-// );
+const { Schema, model } = require('mongoose');
 
 const UserSchema = new Schema(
   {
-    userName: {
+    username: {
       type: String,
       unique: true,
       required: 'Username is required!',
@@ -23,7 +13,7 @@ const UserSchema = new Schema(
         type: String,
         unique: true,
         required: 'Email must exist',
-        match: [/.+@.+\..+/, 'Please enter a valid email!']
+        // match: [/.+@.+\..+/, 'Please enter a valid email!']
       },
       thoughts: [
         {
@@ -39,8 +29,7 @@ const UserSchema = new Schema(
           ref: 'User'
         }
       ],  
-    // use FriendSchema to validate data for a reply
-//     friends: [FriendSchema]
+  
   },
   {
     toJSON: {
@@ -51,7 +40,7 @@ const UserSchema = new Schema(
 );
 
 UserSchema.virtual('friendCount').get(function() {
-  return this.replies.length;
+  return this.friends.length;
 });
 
 const User = model('User', UserSchema);

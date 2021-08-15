@@ -25,12 +25,12 @@ router
   .delete(deleteUser);
 
 // // /api/users/:friendId  
-// router
-// .route('/:userId/:thoughtId')
-// .put(addFriend);
+router
+.route('/:userId/:thoughtId')
+.put(addFriend);
 
 
 // // /api/users/:userId/friends/:friendId
-// router.route('/:userId/friends/:friendId').delete(removeFriend);
+router.route('/:userId/friends/:friendId').delete(removeFriend);
 
 module.exports = router;
