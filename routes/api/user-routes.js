@@ -26,13 +26,16 @@ router
   .put(updateUser)
   .delete(deleteUser);
 
-// // /api/users/:friendId  
-router
-.route('/:userId/:thoughtId')
-.put(addFriend);
+// // // /api/users/:friendId  
+// router
+// .route('/:userId/:thoughtId')
+// .put(addFriend);
 
 
 // // /api/users/:userId/friends/:friendId
-router.route('/:userId/friends/:friendId').delete(removeFriend);
+router
+.route('/:userId/friends/:friendId')
+.post(addFriend)
+.delete(removeFriend);
 
 module.exports = router;
