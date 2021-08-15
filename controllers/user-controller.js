@@ -99,11 +99,11 @@ deleteUser({ params }, res) {
       .catch(err => res.status(400).json(err));
   },
 
-  removeReaction({ params }, res) {
-    Thought.findOneAndUpdate(
-      { _id: params.thoughtId },
+  removeFriend({ params }, res) {
+    User.findOneAndUpdate(
+      { _id: params.userId },
       //$pull operator to remove the specific reaction from the reactions array where the reactionId matches the value of params.reactionId passed in from the route
-      { $pull: { reactions: { reactionId: params.reactionId } } },
+      { $pull: { reactions: { reactionId: params.friendId } } },
       { new: true }
     )
       .then(dbUserData => res.json(dbUserData))
