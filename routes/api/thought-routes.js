@@ -24,12 +24,12 @@ router
   .delete(removeThought);  
 
 
-// /api/thoughts/:thoughtId  
+// /api/thoughts/:thoughtId/reactions
 router
-  .route('/:userId/:thoughtId')
-  .put(addReaction)
+  .route('/:thoughtId/reactions')
+  .post(addReaction)
 
-// /api/thoughts/:userId/:thoughtId/:reactionId
-router.route('/:userId/:thoughtId/:reactionId').delete(removeReaction);
+// /api/thoughts/:thoughtId/:reactionId
+router.route('/:thoughtId/reactions/:reactionId').delete(removeReaction);
 
 module.exports = router;

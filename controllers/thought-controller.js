@@ -46,12 +46,12 @@ const thoughtController = {
     },
 
   // add thought to a user
-  addThought({ params, body }, res) {
+  addThought({body }, res) {
     console.log(body);
     Thought.create(body)
       .then(({ _id }) => {
         return User.findOneAndUpdate(
-          { _id: params.userId },
+          { _id: body.userId },
           //the push method works just like in JS; it pushes data to an array
           //Allows addition of specific thought to the user
           { $push: { thoughts: _id } },
@@ -75,15 +75,21 @@ const thoughtController = {
       { $push: { reactions: body } },
       { new: true }
     )
-      .then(dbUserData => {
-        if (!dbUserData) {
-          res.status(404).json({ message: 'No user found with this id!' });
-          return;
-        }
-        res.json(dbUserData);
-      })
-      .catch(err => res.json(err));
-  },
+    .then(dbUserData => {
+      // if (!dbUserData) {
+      //   res.status(404).json({ message: 'No user found with this id!' });
+      //   return;
+      // }
+      res.json(dbUserData);
+    })
+    .catch(err => {
+      //this prints the entire error in your backend terminal.
+      //much better for debugging than just res.json(err)
+      console.log(err)
+
+      res.json(err) //this tells the frontend to say "there's an error!" but... few details.
+    });
+},
 
    // update thought by id
 updateThought({ params, body }, res) {

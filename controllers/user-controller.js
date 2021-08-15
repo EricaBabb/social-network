@@ -57,19 +57,28 @@ createUser({ body }, res) {
   },
 
   addFriend({ params, body }, res) {
+    console.log("You're adding a friend"),
+    console.log("params", params),
+    console.log("body", body),
     User.findOneAndUpdate(
-      { _id: params.UserId },
-      { $push: { reactions: body } },
+      { _id: params.userId },
+      { $push: { friends: body } },
       { new: true }
     )
       .then(dbUserData => {
-        if (!dbUserData) {
-          res.status(404).json({ message: 'No user found with this id!' });
-          return;
-        }
+        // if (!dbUserData) {
+        //   res.status(404).json({ message: 'No user found with this id!' });
+        //   return;
+        // }
         res.json(dbUserData);
       })
-      .catch(err => res.json(err));
+      .catch(err => {
+        //this prints the entire error in your backend terminal.
+        //much better for debugging than just res.json(err)
+        console.log(err)
+
+        res.json(err) //this tells the frontend to say "there's an error!" but... few details.
+      });
   },
 
 
