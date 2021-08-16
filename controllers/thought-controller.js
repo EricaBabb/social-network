@@ -105,31 +105,18 @@ updateThought({ params, body }, res) {
       .catch(err => res.status(400).json(err));
   },
 
-  // remove thought
-  removeThought({ params }, res) {
-      //This pulls the thought data and deletes the document
-    Thought.findOneAndDelete({ _id: params.thoughtId })
-      .then(deletedThought => {
-        if (!deletedThought) {
-          return res.status(404).json({ message: 'No thought with this id!' });
-        }
-        //Using the thought data from the previous function, it removes the thought from the user (does not delete thought data)
-        return User.findOneAndUpdate(
-          { _id: params.userId },
-          { $pull: { thoughts: params.thoughtId } },
-          { new: true }
-          //return the updated user, now with the thought removed from the whole thought section
-        );
-      })
-      .then(dbUserData => {
-        if (!dbUserData) {
+
+     removeThought({ params }, res) {
+    Thought.findOneAndDelete({ _id: params.id })
+      .then(dbThoughtData => {
+        if (!dbThoughtData) {
           res.status(404).json({ message: 'No user found with this id!' });
           return;
         }
-        res.json(dbUserData);
+        res.json(dbThoughtData);
       })
-      .catch(err => res.json(err));
-  },
+      .catch(err => res.status(400).json(err));
+  }, 
 
   // remove reaction
 removeReaction({ params }, res) {
